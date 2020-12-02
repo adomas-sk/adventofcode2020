@@ -1,5 +1,17 @@
 const RESULTING_AMOUNT = 2020;
 
+const mainButBetter = (expenseReport) => {
+  const reportMap = expenseReport.reduce((acc, val) => {
+    acc[val] = true;
+    return acc;
+  }, {});
+  const secondNumber = expenseReport.find(
+    (item) => reportMap[RESULTING_AMOUNT - item]
+  );
+
+  return (RESULTING_AMOUNT - secondNumber) * secondNumber;
+}
+
 const main = (expenseReport) => {
   const pair = expenseReport.reduce((acc, firstItem, firstIndex) => {
     if (acc.length) {
