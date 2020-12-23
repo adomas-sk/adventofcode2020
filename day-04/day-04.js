@@ -1,4 +1,17 @@
-const requiredFields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
+const requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
+
+const partOne = (passports) => {
+  return passports.reduce((acc, passport) => {
+    const fields = passport.split('\n').join(' ').split(' ');
+    const isEveryFieldInPassport = requiredFields.every((reqField) =>
+      fields.find((field) => field.startsWith(reqField))
+    );
+    if (isEveryFieldInPassport) {
+      acc += 1;
+    }
+    return acc;
+  }, 0);
+};
 
 const yearValidation = (min, max) => (_year) => {
   const year = parseInt(_year);
@@ -9,14 +22,12 @@ const heightValidation = (height) => {
   if (height.length < 4) {
     return 0;
   }
-  const lastTwoCharacters = `${height[height.length - 2]}${
-    height[height.length - 1]
-  }`;
+  const lastTwoCharacters = `${height[height.length - 2]}${height[height.length - 1]}`;
   const amount = height.slice(0, height.length - 2);
-  if (lastTwoCharacters === "cm") {
+  if (lastTwoCharacters === 'cm') {
     return amount >= 150 && amount <= 193;
   }
-  if (lastTwoCharacters === "in") {
+  if (lastTwoCharacters === 'in') {
     return amount >= 59 && amount <= 76;
   }
   return false;
@@ -26,16 +37,16 @@ const hairColorValidation = (hairColor) => {
   if (hairColor.length !== 7) {
     return false;
   }
-  return !!hairColor.match(new RegExp("^#([a-fA-F0-9]{6})$"));
+  return !!hairColor.match(new RegExp('^#([a-fA-F0-9]{6})$'));
 };
 
 const eyeColorValidation = (eyeColor) => {
-  const validEyeColors = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"];
+  const validEyeColors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'];
   return validEyeColors.includes(eyeColor);
 };
 
 const pidValidation = (pid) => {
-  return pid.length === 9 && !!pid.match(new RegExp("^[0-9]{9}$"));
+  return pid.length === 9 && !!pid.match(new RegExp('^[0-9]{9}$'));
 };
 
 const validationMap = {
@@ -48,18 +59,16 @@ const validationMap = {
   pid: pidValidation,
 };
 
-const main = (passports) => {
+const partTwo = (passports) => {
   return passports.reduce((acc, passport) => {
-    const fields = passport.split("\n").join(" ").split(" ");
-    const hasEveryField = requiredFields.every((reqField) =>
-      fields.find((field) => field.startsWith(reqField))
-    );
+    const fields = passport.split('\n').join(' ').split(' ');
+    const hasEveryField = requiredFields.every((reqField) => fields.find((field) => field.startsWith(reqField)));
     if (!hasEveryField) {
       return acc;
     }
 
     const validationResults = fields.map((field) => {
-      const [key, value] = field.split(":");
+      const [key, value] = field.split(':');
       if (key === 'cid') {
         return true;
       }
@@ -75,4 +84,7 @@ const main = (passports) => {
   }, 0);
 };
 
-module.exports = main;
+module.exports = {
+  partOne,
+  partTwo,
+};
